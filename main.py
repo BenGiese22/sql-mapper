@@ -1,30 +1,21 @@
-from re import M
-
-
-import re
-from re import Pattern
+import click
+from file_search import FileSearch
 from pathlib import Path
 
-def search_file(file_path: Path, search_pattern: Pattern):
-    search_results = []
-    with file_path.open() as f:
-        for line in f:
-            # print(str(line))
-            match = search_pattern.search(str(line))
-            if match:
-                from_table = match.group(2)
-                to_table = match.group(1)
-                search_results.append(f"From: {from_table} -> To: {to_table}")
-    return search_results
-            
+@click.command()
+@click.argument('file_path', type=click.Path(exists=True))
+def search_file(file_path):
+    """Simple program that searches file for insert into and froms."""
+    click.echo(f"Searching File: {click.format_filename(file_path)}")
+    file_search = FileSearch()
+    search_results = file_search.search_file_for_insert_into_from(Path(file_path))
+    click.echo(search_results)
 
-def main():
-    # create_table_pattern = re.compile("create\stable\s(\S+)", re.IGNORECASE)
-    select_from_pattern = re.compile("insert\sinto\s(\S+).+from\s([A-Za-z_]+)", re.IGNORECASE)
-    file_path = Path(__file__).parent.joinpath("./test_file.py")
-    search_results = search_file(file_path, select_from_pattern)
-    print(search_results)
-        
+# TODO run over directory
+    # TODO handle subdirectories
+# TODO run over file
 
-if __name__ == "__main__":
-    main()
+
+
+if __name__ == '__main__':
+    search_file()

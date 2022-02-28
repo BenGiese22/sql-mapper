@@ -1,7 +1,7 @@
 import unittest
 from typing import Tuple
 from common import TEST_FILES_PATH
-from file_search import SearchPattern, FileSearch
+from file_search import FileSearch
 
 class FileSearchTestCase(unittest.TestCase):
 
