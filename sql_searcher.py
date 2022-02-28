@@ -11,11 +11,24 @@ class SearchPattern(Enum):
     CREATED_TABLE = "create\stable\s(if\s(not\s)?exists\s)?([A-Za-z_.0-9]+)"
 
 
-class FileSearch:
+class SqlSearcher:
 
     def __init__(self) -> None:
         pass
 
+    def search_directory(self, dir_path: Path, search_pattern: SearchPattern) -> list:
+        search_func = None
+        if search_pattern is SearchPattern.INSERT_INTO_FROM:
+            search_func = self.search_file_for_insert_into_from
+        elif search_pattern is SearchPattern.CREATED_TABLE:
+            search_func = self.search_file_for_create_table
+        search_results = []
+        for path in dir_path.iterdir():
+            if path.is_dir():
+                search_results += self.search_directory(path, search_pattern)
+            else:
+                search_results += search_func(path)
+        return search_results
 
     def search_file_for_create_table(self, file_path: Path) -> list:
         regex = re.compile(SearchPattern.CREATED_TABLE.value, re.IGNORECASE)
@@ -52,7 +65,7 @@ class FileSearch:
         return search_results
 
     def search_file_for_select_statements(self, file_path: Path) -> list:
-        pass
+        raise NotImplementedError("sql_searcher.search_file_for_select_statements is not yet implemented.")
 
     def search_file_for_update_from(self, file_path: Path) -> list:
         update_from_regex = re.compile(SearchPattern.UPDATE_FROM.value, re.IGNORECASE)
@@ -77,3 +90,7 @@ class FileSearch:
                     elif update_match:
                         update_table = update_match.group(1)
         return search_results
+
+    def search_file_xxx_handle_cte_statements(self, file_path: Path) -> list:
+        # TODO implement this functionality into the other search functions.
+        raise NotImplementedError("sql_searcher.search_for_cte_statements is not yet implemented.")
