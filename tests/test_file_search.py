@@ -1,5 +1,5 @@
-from typing import Tuple
 import unittest
+from typing import Tuple
 from common import TEST_FILES_PATH
 from file_search import SearchPattern, FileSearch
 

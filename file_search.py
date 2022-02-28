@@ -12,31 +12,10 @@ class SearchPattern(Enum):
     CREATED_TABLE = "create\stable\s(if\s(not\s)?exists\s)?([A-Za-z_.0-9]+)"
 
 
-
 class FileSearch:
 
     def __init__(self) -> None:
         pass
-
-
-    # def search_file(self, file_path: Path, search_pattern: SearchPattern, ignore_case: bool = True) -> list:
-    #     regex = re.compile(search_pattern.value, re.IGNORECASE) if ignore_case else re.compile(search_pattern.value)
-    #     search_results = []
-    #     with file_path.open() as f:
-    #         for line in f:
-    #             # print(str(line))
-    #             match = regex.search(str(line))
-    #             if match:
-    #                 match_result = self._extract_result(match, search_pattern)
-    #                 search_results.append(match_result)
-    #     return search_results
-
-    # def _extract_result(self, match: Match, search_pattern: SearchPattern):
-    #     if search_pattern is SearchPattern.CREATED_TABLE:
-    #         return match.group(1)
-    #     elif search_pattern is SearchPattern.INSERT_INTO_FROM:
-    #         return (match.group(1), match.group(2)) # (insert into, from)
-    #     return None
 
 
     def search_file_for_create_table(self, file_path: Path) -> list:
