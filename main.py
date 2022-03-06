@@ -1,6 +1,7 @@
 import click
 from sql_searcher import SearchPattern, SqlSearcher
 from pathlib import Path
+from tree_structure import TreeStructure
 
 class InvalidPathError(RuntimeError):
     pass
@@ -10,6 +11,7 @@ class InvalidPathError(RuntimeError):
 def search(input_path):
     """Simple program that searches file for insert into and froms."""
     sql_searcher = SqlSearcher()
+    tree_structure = TreeStructure()
     click.echo(input_path)
     click.echo(f"Searching File: {click.format_filename(input_path)}")
 
@@ -21,6 +23,9 @@ def search(input_path):
     elif input_path.is_file():
         search_results = sql_searcher.search_file_for_insert_into_from(input_path)
     click.echo(search_results)
+    trees = tree_structure.create_trees(search_results)
+    for tree in trees:
+        tree.show()
 
 
 if __name__ == '__main__':
