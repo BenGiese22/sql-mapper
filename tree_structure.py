@@ -1,22 +1,39 @@
 from typing import Tuple
 from treelib import Node, Tree
-
+from sql_searcher import SearchPattern
 
 class TreeStructure:
 
-    def __init__(self) -> None:
-        pass
+    def __init__(self, search_pattern: SearchPattern) -> None:
+        self.search_pattern = search_pattern
 
-    def create_trees(self, insert_into_from_data: list) -> list:
+
+    def create_trees(self, data_set: list) -> list:
+        if self.search_pattern is SearchPattern.INSERT_INTO_FROM:
+            return self.create_insert_into_from_trees(data_set)
+        return self.create_create_tree(data_set)
+
+    def create_create_tree(self, data_set: list) -> list:
+        tree = Tree()
+        if len(data_set) == 0:
+            tree.create_node("No results", "no_results")
+            return tree
+        
+        tree.create_node("Create Table Instances", "create_table_instances")
+        for create_table_instance in data_set:
+            tree.create_node(str(create_table_instance), str(create_table_instance).lower(), "create_table_instances")
+        return [tree]
+
+    def create_insert_into_from_trees(self, insert_into_from_data: list) -> list:
         trees = []
-        tree, remaining_data = self.create_tree(Tree(), insert_into_from_data)
+        tree, remaining_data = self._create_insert_into_from_tree(Tree(), insert_into_from_data)
         trees.append(tree)
         while len(remaining_data) > 0:
-            tree, remaining_data = self.create_tree(Tree(), remaining_data)
+            tree, remaining_data = self._create_insert_into_from_tree(Tree(), remaining_data)
             trees.append(tree)
         return trees
 
-    def create_tree(self, tree: Tree, data_subset: list) -> Tuple[Tree, list]:
+    def _create_insert_into_from_tree(self, tree: Tree, data_subset: list) -> Tuple[Tree, list]:
         remaining_data = []
 
         for subset in data_subset:
@@ -43,7 +60,7 @@ class TreeStructure:
         
         if len(remaining_data) == len(data_subset): #nothing matched.
             return tree, remaining_data
-        return self.create_tree_temp(tree, remaining_data)
+        return self._create_insert_into_from_tree(tree, remaining_data)
 
     def _get_existing_nodes(self, tree) -> list:
         return [tree[node].tag for node in tree.expand_tree(mode=Tree.DEPTH)]

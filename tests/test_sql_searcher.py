@@ -21,6 +21,7 @@ class SqlSearcherTestCase(unittest.TestCase):
         file_one_path = TEST_FILES_PATH.joinpath("./file_one.py")
         search_results = self.sql_searcher.search_file_for_create_table(file_one_path)
         self.assertEqual(len(search_results), 1)
+        self.assertEqual(search_results[0], 'test_table')
 
     def test_insert_into_from_file_two(self) -> None:
         file_two_path = TEST_FILES_PATH.joinpath("./file_two.py")
