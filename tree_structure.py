@@ -1,5 +1,6 @@
 from typing import Tuple
-from treelib import Node, Tree
+from treelib import Tree
+from treelib.exceptions import DuplicatedNodeIdError, MultipleRootError
 from sql_searcher import SearchPattern
 
 class TreeStructure:
@@ -40,13 +41,23 @@ class TreeStructure:
             parent_node = subset[1]
             child_node = subset[0]
             if tree.depth() == 0: # tree is empty, start one
-                tree.create_node(parent_node, parent_node)
-                tree.create_node(child_node, child_node, parent_node)
+                try:
+                    tree.create_node(parent_node, parent_node)
+                    tree.create_node(child_node, child_node, parent_node)
+                except (DuplicatedNodeIdError, MultipleRootError):
+                    print(data_subset)
+                    print(parent_node)
+                    print(child_node)
+                    print(subset)
+                    tree.show()
                 continue
             
             existing_nodes = self._get_existing_nodes(tree)
             if parent_node in existing_nodes:
-                tree.create_node(child_node, child_node, parent_node)
+                try:
+                    tree.create_node(child_node, child_node, parent_node)
+                except DuplicatedNodeIdError:
+                    tree.show()
             elif child_node in existing_nodes:
                 #create a new tree and add this tree to it.
                 parent_tree = Tree()
@@ -55,7 +66,7 @@ class TreeStructure:
                 parent_tree.paste(parent_node, tree)
                 tree = parent_tree
             else:
-                print('Data not relevant to this tree')
+                # print('Data not relevant to this tree')
                 remaining_data.append(subset)
         
         if len(remaining_data) == len(data_subset): #nothing matched.
