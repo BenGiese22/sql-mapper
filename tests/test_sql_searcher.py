@@ -74,10 +74,10 @@ class SqlSearcherTestCase(unittest.TestCase):
         self.assertEqual(search_results[8], ('singular_kochava_cpe', 'kochavas'))
         self.assertEqual(search_results[9], ('singular_kochava_cpi', 'kochavas'))
         self.assertEqual(search_results[10], ('doubledown_appsflyer', 'appsflyer_postbacks'))
-        self.assertEqual(search_results[12], ('tmp.singular_export_${mmp}_${mod_adv}_${mnth}', 'singular_${mmp}_cpe'))
-        self.assertEqual(search_results[13], ('tmp.singular_export_${mmp}_${mod_adv}_${mnth}', 'singular_${mmp}_cpi'))
-        self.assertEqual(search_results[14], ('tmp.singular_export_${mmp}_${mod_adv}_${mnth}', 'doubledown_appsflyer'))        
-        self.assertEqual(len(search_results), 15)
+        self.assertEqual(search_results[11], ('tmp.singular_export_${mmp}_${mod_adv}_${mnth}', 'singular_${mmp}_cpe'))
+        self.assertEqual(search_results[12], ('tmp.singular_export_${mmp}_${mod_adv}_${mnth}', 'singular_${mmp}_cpi'))
+        self.assertEqual(search_results[13], ('tmp.singular_export_${mmp}_${mod_adv}_${mnth}', 'doubledown_appsflyer'))        
+        self.assertEqual(len(search_results), 14)
 
 if __name__ == '__main__':
     unittest.main()

@@ -4,10 +4,10 @@ from enum import Enum
 
 class SearchPattern(Enum):
     UPDATE = "update\s([A-Za-z_.$\{\}0-9]+)"
-    INSERT_INTO = "insert\sinto\s([A-Za-z_.$\{\}0-9]+)"
+    INSERT_INTO = "insert\s+into\s+([A-Za-z_.$\{\}0-9]+)"
     FROM = "from\s([A-Za-z_.$\{\}0-9]+)"
     UPDATE_FROM = "update\s(\S+).+from\s([A-Za-z_.$\{\}0-9]+)"
-    INSERT_INTO_FROM = "insert\sinto\s(\S+).+from\s([A-Za-z_.$\{\}0-9]+)"
+    INSERT_INTO_FROM = "insert\s+into\s+(\S+).+from\s([A-Za-z_.$\{\}0-9]+)"
     CREATED_TABLE = "create\stable\s(if\s(not\s)?exists\s)?([A-Za-z_.$\{\}0-9]+)"
 
 
@@ -51,7 +51,6 @@ class SqlSearcher:
 
         search_results = []
         insert_table = ""
-        # print(f"Processing: {str(file_path)}")
         with file_path.open() as f:
             for line in f:
                 if insert_table != '': # Look for From
@@ -60,7 +59,7 @@ class SqlSearcher:
                         insert_table = ''
 
                     from_match = from_regex.search(str(line))
-                    if from_match:
+                    if from_match and 'substring' not in str(line).lower():
                         search_results.append(((insert_table), from_match.group(1)))
                         insert_table = ''
                 else:
