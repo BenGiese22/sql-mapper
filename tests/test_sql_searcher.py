@@ -13,7 +13,7 @@ class SqlSearcherTestCase(unittest.TestCase):
 
     def test_insert_into_from_file_one(self) -> None:
         file_one_path = TEST_FILES_PATH.joinpath("./file_one.py")
-        search_results = self.sql_searcher.search_file_for_insert_into_from(file_one_path)
+        search_results = self.sql_searcher.process_word_by_word(file_one_path)
         self.assertEqual(len(search_results), 1)
         self.assertTrue(isinstance(search_results[0], Tuple))
 

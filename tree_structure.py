@@ -1,7 +1,7 @@
 from typing import Tuple
 from treelib import Tree
 from treelib.exceptions import DuplicatedNodeIdError, MultipleRootError
-from sql_searcher import SearchPattern
+from enums.search_pattern import SearchPattern
 
 class TreeStructure:
 
